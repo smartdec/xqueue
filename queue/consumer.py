@@ -116,7 +116,7 @@ def post_failure_to_lms(header):
     return post_grade_to_lms(header, json.dumps(failure_msg))
 
 
-def post_grade_to_lms(header, body):
+def post_grade_to_lms(header, body, submission = None):
     '''
     Send grading results back to LMS
         header:  JSON-serialized xqueue_header (string)
@@ -128,8 +128,10 @@ def post_grade_to_lms(header, body):
     header_dict = json.loads(header)
     lms_callback_url = header_dict['lms_callback_url']
 
-    payload = {'xqueue_header': header, 'xqueue_body': body}
-
+    if submission is None:
+        payload = {'xqueue_header': header, 'xqueue_body': body}
+    else:
+        payload = {'xqueue_header': header, 'xqueue_body': body, 'xqueue_submission': submission}
     # Quick kludge retries to fix prod problem with 6.00x push graders. We're
     # seeing abrupt disconnects when servers are taken out of the ELB, causing
     # in flight lms_ack requests to fail. This just tries five times before

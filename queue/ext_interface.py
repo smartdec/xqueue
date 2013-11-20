@@ -139,7 +139,7 @@ def put_result(request):
             submission.grader_reply = grader_reply
 
             # Deliver grading results to LMS
-            submission.lms_ack = queue.consumer.post_grade_to_lms(submission.xqueue_header, grader_reply)
+            submission.lms_ack = queue.consumer.post_grade_to_lms(submission.xqueue_header, grader_reply, submission.xqueue_body)
             submission.retired = submission.lms_ack
 
             submission.save()
