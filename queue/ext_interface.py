@@ -132,6 +132,9 @@ def put_result(request):
                 ))
                 return HttpResponse(compose_reply(False,'Submission does not exist'))
 
+            if submission.pullkey is None:
+                submission.pullkey = submission_key
+
             if not submission.pullkey or submission_key != submission.pullkey:
                 return HttpResponse(compose_reply(False,'Incorrect key for submission'))
 
